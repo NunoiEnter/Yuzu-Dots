@@ -11,7 +11,7 @@
     ];
 
     shellsAndTerminals = with pkgs; [
-      zsh fish foot alacritty
+      zsh fish foot alacritty ghostty
     ];
 
     development = with pkgs; [
