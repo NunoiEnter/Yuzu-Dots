@@ -1,5 +1,5 @@
 # In your home.nix
-
+{
 programs.fastfetch = {
   enable = true;
   settings = {
@@ -84,3 +84,4 @@ programs.fastfetch = {
     ];
   };
 };
+}
