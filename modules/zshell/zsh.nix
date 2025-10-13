@@ -1,7 +1,9 @@
+{ config, pkgs, ...}:
 
-programs.zsh = {
-  enable = true ;
-  shellAliases = {
+{
+  programs.zsh = {
+   enable = true ;
+   shellAliases = {
 	btw = "echo i use nixos btw ";
  	nrs = "sudo nixos-rebuild switch" ;
 	};
