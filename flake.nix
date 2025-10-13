@@ -17,6 +17,14 @@ outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
     username = "monica";
+
+    pkgs = import nixpkgs {
+	inherit system;
+	config = {
+	  allowUnfree = true;
+	};
+    };
+
   in {
     homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.${system};

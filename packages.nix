@@ -35,4 +35,5 @@
   in
     # Combine all the lists into the final list
     coreUtils ++ shellsAndTerminals ++ development ++ guiApps ++ customization;
+
 }
