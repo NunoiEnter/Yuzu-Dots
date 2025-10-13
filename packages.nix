@@ -1,6 +1,6 @@
 # This file is now a function that returns a LIST of packages.
 
-{ pkgs }:
+{ pkgs, libs , ... }:
 
 let
   # Define your package categories as separate lists
