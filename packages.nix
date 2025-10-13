@@ -1,46 +1,38 @@
-# This file is now a function that returns a LIST of packages.
+# ~/Yuzu-Dots/packages.nix
+{ pkgs, ... }:
 
-{ pkgs, libs , ... }:
+# This file is now a full module that sets the home.packages option.
+{
+  home.packages = let
+    # Define your package categories as separate lists
+    coreUtils = with pkgs; [
+      stow killall vim wget curl jq btop gnumake
+      networkmanager pavucontrol pamixer fastfetch flatpak
+    ];
 
-let
-  # Define your package categories as separate lists
-  coreUtils = with pkgs; [
-    stow killall vim wget curl jq btop gnumake
-    networkmanager pavucontrol pamixer fastfetch flatpak
-  ];
+    shellsAndTerminals = with pkgs; [
+      zsh fish foot alacritty
+    ];
 
-  shellsAndTerminals = with pkgs; [
-    zsh fish foot alacritty
-  ];
+    development = with pkgs; [
+      pkgs.home-manager
+      neovim vscode
+      git gcc pkg-config
+      go nodejs pnpm python3 pipx
+      wails gtk3 libappindicator libnotify
+      tesseract leptonica imagemagick
+    ];
 
-  development = with pkgs; [
-    #NixOS
-    pkgs.home-manager
-    # Editors
-    neovim vscode
-    # Core Tools
-    git gcc pkg-config
-    # Languages & Runtimes
-    go nodejs pnpm python3 pipx
-    # Build Dependencies & Libs
-    wails gtk3 libappindicator libnotify
-    # Image & OCR
-    tesseract leptonica imagemagick
-  ];
+    guiApps = with pkgs; [
+      niri fuzzel vesktop obs-studio
+    ];
 
-  guiApps = with pkgs; [
-    niri fuzzel vesktop obs-studio
-  ];
-
-  customization = with pkgs; [
-    # Theming & Visuals
-    swww pywal wpgtk
-    # Bars & Launchers
-    eww waybar rofi
-    # Utilities
-    cava xwayland wl-clipboard dunst mpvpaper
-  ];
-
-in
-  # Combine and RETURN all the lists
-  coreUtils ++ shellsAndTerminals ++ development ++ guiApps ++ customization
+    customization = with pkgs; [
+      swww pywal wpgtk
+      eww waybar rofi
+      cava xwayland wl-clipboard dunst mpvpaper
+    ];
+  in
+    # Combine all the lists into the final list
+    coreUtils ++ shellsAndTerminals ++ development ++ guiApps ++ customization;
+}

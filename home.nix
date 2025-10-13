@@ -9,9 +9,8 @@
   # --- Imports ---
   imports = [
     ./modules/zshell/zsh.nix
+    ./packages.nix 
   ];
 
-  # --- Packages ---
-  home.packages = import ./packages.nix { inherit pkgs; };
-  programs.home-manager.enable = true;
+ programs.home-manager.enable = true;
 }
