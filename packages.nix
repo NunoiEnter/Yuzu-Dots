@@ -15,7 +15,6 @@
     ];
 
     development = with pkgs; [
-      pkgs.home-manager
       neovim vscode
       git gcc pkg-config
       go nodejs pnpm python3 pipx
