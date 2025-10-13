@@ -9,6 +9,7 @@
   # --- Imports ---
   imports = [
     ./modules/zshell/zsh.nix
+    ./modules/Fastfetch/fastfetch.nix
     ./packages.nix 
   ];
 
