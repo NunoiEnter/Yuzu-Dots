@@ -5,7 +5,7 @@ programs.fastfetch = {
   settings = {
 
     logo = {
-      source = ''$(find "${XDG_CONFIG_HOME:-$HOME/.config}/fastfetch/pngs/" -name "*.png" | sort -R | head -1)'';
+      source = ''$(find "''${XDG_CONFIG_HOME:-''$HOME/.config}/fastfetch/pngs/" -name "*.png" | sort -R | head -1)'';
       height = 10;
       padding = {
         top = 4;
