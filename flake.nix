@@ -27,8 +27,8 @@ outputs = { self, nixpkgs, home-manager, ... }@inputs:
 
   in {
     homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.${system};
       
+      inherit pkgs;
       # This is the important part!
       # We pass our local packages file into the modules.
       # Home Manager will automatically interpret it as an overlay.
