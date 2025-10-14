@@ -1,4 +1,4 @@
-fastfetch.nix
+#fastfetch.nix
 {
 programs.fastfetch = {
   enable = true;
