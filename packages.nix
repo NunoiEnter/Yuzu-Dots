@@ -20,7 +20,7 @@
       go nodejs pnpm python3 pipx
       wails gtk3 libappindicator libnotify
       tesseract leptonica imagemagick
-      bun
+      bun qbittorrent
     ];
 
     guiApps = with pkgs; [
