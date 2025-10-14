@@ -20,6 +20,7 @@
       go nodejs pnpm python3 pipx
       wails gtk3 libappindicator libnotify
       tesseract leptonica imagemagick
+      bun npm npx mnpm
     ];
 
     guiApps = with pkgs; [
