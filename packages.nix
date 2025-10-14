@@ -11,7 +11,8 @@
     ];
 
     shellsAndTerminals = with pkgs; [
-      zsh fish foot alacritty ghostty
+      zsh fish foot alacritty ghostty ani-cli yt-dlp ytfzf
+      mpv mpd imv vlc fzf dmenu ueberzugpp mov-cli
     ];
 
     development = with pkgs; [
