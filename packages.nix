@@ -31,7 +31,7 @@
       swww pywal wpgtk
       eww waybar rofi
       cava xwayland wl-clipboard dunst mpvpaper
-
+      htop cmatrix tty-clock catnip
     ];
   in
     # Combine all the lists into the final list
