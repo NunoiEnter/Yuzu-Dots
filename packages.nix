@@ -15,12 +15,12 @@
     ];
 
     development = with pkgs; [
-      neovim vscode
+      neovim vscode tree
       git gcc pkg-config
       go nodejs pnpm python3 pipx
       wails gtk3 libappindicator libnotify
       tesseract leptonica imagemagick
-      bun qbittorrent
+      bun qbittorrent nemo-with-extensions
     ];
 
     guiApps = with pkgs; [
@@ -31,6 +31,7 @@
       swww pywal wpgtk
       eww waybar rofi
       cava xwayland wl-clipboard dunst mpvpaper
+
     ];
   in
     # Combine all the lists into the final list
