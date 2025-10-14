@@ -1,4 +1,4 @@
-# In your home.nix
+fastfetch.nix
 {
 programs.fastfetch = {
   enable = true;
