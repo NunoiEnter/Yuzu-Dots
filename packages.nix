@@ -11,8 +11,8 @@
     ];
 
     shellsAndTerminals = with pkgs; [
-      zsh fish foot alacritty ghostty ani-cli yt-dlp ytfzf
-      mpv mpd imv vlc fzf dmenu ueberzugpp mov-cli ffmpeg
+      zsh fish foot alacritty ghostty ani-cli ytfzf yt-dlp-light
+      mpv mpd imv vlc fzf dmenu ueberzugpp ffmpeg jq curl
     ];
 
     development = with pkgs; [
@@ -21,11 +21,11 @@
       go nodejs pnpm python3 pipx
       wails gtk3 libappindicator libnotify
       tesseract leptonica imagemagick
-      bun qbittorrent nemo-with-extensions
+      bun qbittorrent nemo-with-extensions p7zip
     ];
 
     guiApps = with pkgs; [
-      niri fuzzel vesktop obs-studio
+      niri fuzzel vesktop obs-studiio lutris-unwrapped
     ];
 
     customization = with pkgs; [
