@@ -16,7 +16,7 @@
     ];
 
     development = with pkgs; [
-      neovim vscode tree
+      neovim vscode tree unrar
       git gcc pkg-config
       go nodejs pnpm python3 pipx
       wails gtk3 libappindicator libnotify
@@ -25,8 +25,15 @@
     ];
 
     guiApps = with pkgs; [
-      niri fuzzel vesktop obs-studio lutris-unwrapped
-    ];
+      niri fuzzel vesktop obs-studio lutris wine
+    virt-manager  steam winetricks
+    virt-viewer
+    spice
+    spice-gtk
+    spice-protocol
+    win-virtio
+    win-spice
+   ];
 
     customization = with pkgs; [
       swww pywal wpgtk
