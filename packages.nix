@@ -25,7 +25,7 @@
     ];
 
     guiApps = with pkgs; [
-      niri fuzzel vesktop obs-studiio lutris-unwrapped
+      niri fuzzel vesktop obs-studio lutris-unwrapped
     ];
 
     customization = with pkgs; [
