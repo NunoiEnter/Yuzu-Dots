@@ -6,7 +6,7 @@
   home.packages = let
     # Define your package categories as separate lists
     coreUtils = with pkgs; [
-      stow killall vim wget curl jq btop gnumake
+      stow killall vim wget curl jq btop gnumake sddm-chili-theme
       networkmanager pavucontrol pamixer fastfetch flatpak
     ];
 
@@ -19,25 +19,17 @@
       neovim vscode tree unrar
       git gcc pkg-config
       go nodejs pnpm python3 pipx
-      wails gtk3 libappindicator libnotify
-      tesseract leptonica imagemagick
       bun qbittorrent nemo-with-extensions p7zip
     ];
 
     guiApps = with pkgs; [
-      niri fuzzel vesktop obs-studio lutris wine
-    virt-manager  steam winetricks
-    virt-viewer
-    spice
-    spice-gtk
-    spice-protocol
-    win-virtio
-    win-spice
+    niri fuzzel vesktop obs-studio
    ];
 
     customization = with pkgs; [
-      swww pywal wpgtk
-      eww waybar rofi
+      swww pywal wpgtk libsForQt5.qt5.qtgraphicaleffects
+      eww waybar rofi qt5.qtgraphicaleffects
+      qt5.qtquickcontrols2
       cava xwayland wl-clipboard dunst mpvpaper
       htop cmatrix tty-clock catnip
     ];
