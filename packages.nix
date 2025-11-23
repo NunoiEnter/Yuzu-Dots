@@ -23,6 +23,7 @@
       stow            # Dotfile manager
       vim
       wget
+      gh
     ];
 
     # ─── Shells, Terminals & CLI Tools ────────────────────────────
