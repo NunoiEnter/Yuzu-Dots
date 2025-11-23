@@ -1,40 +1,124 @@
 # ~/Yuzu-Dots/packages.nix
 { pkgs, ... }:
 
-# This file is now a full module that sets the home.packages option.
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🍋 YUZU-DOTS :: PACKAGE MANAGEMENT
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 {
   home.packages = let
-    # Define your package categories as separate lists
+    
+    # ─── System & Core Utilities ──────────────────────────────────
     coreUtils = with pkgs; [
-      stow killall vim wget curl jq btop gnumake sddm-chili-theme
-      networkmanager pavucontrol pamixer fastfetch flatpak
+      btop            # Resource monitor
+      curl
+      fastfetch       # System info fetcher
+      flatpak
+      gnumake
+      jq              # JSON processor
+      killall
+      networkmanager
+      pamixer         # PulseAudio mixer
+      pavucontrol     # PulseAudio GUI control
+      stow            # Dotfile manager
+      vim
+      wget
     ];
 
+    # ─── Shells, Terminals & CLI Tools ────────────────────────────
     shellsAndTerminals = with pkgs; [
-      zsh fish foot alacritty ghostty ani-cli ytfzf yt-dlp-light
-      mpv mpd imv vlc fzf dmenu ueberzugpp ffmpeg jq curl
+      # Terminals & Shells
+      alacritty
+      fish
+      foot
+      ghostty
+      zsh
+      
+      # CLI Media & Tools
+      ani-cli         # Watch anime via CLI
+      ffmpeg
+      fzf             # Fuzzy finder
+      imv             # Image viewer
+      mpd             # Music Player Daemon
+      mpv             # Media player
+      ueberzugpp      # Image previews in terminal
+      vlc
+      yazi            # Terminal file manager 🦀
+      yt-dlp-light    # YouTube downloader
+      ytfzf           # YouTube fuzzy finder
     ];
 
+    # ─── Development & Coding ─────────────────────────────────────
     development = with pkgs; [
-      neovim vscode tree unrar
-      git gcc pkg-config
-      go nodejs pnpm python3 pipx
-      bun qbittorrent nemo-with-extensions p7zip
+      # Editors
+      neovim
+      vscode
+      
+      # Languages & Runtimes
+      bun
+      gcc
+      git
+      go
+      nodejs
+      pnpm
+      python3
+      pipx
+      rustup
+      pkg-config
+      
+      # Windows Cross-Compilation
+      pkgsCross.mingwW64.stdenv.cc
+      pkgsCross.mingwW64.windows.pthreads
+      
+      # Tools
+      github-desktop
+      p7zip
+      qbittorrent
+      tree
+      unrar
     ];
 
+    # ─── GUI Applications ─────────────────────────────────────────
     guiApps = with pkgs; [
-    niri fuzzel vesktop obs-studio
-   ];
-
-    customization = with pkgs; [
-      swww pywal wpgtk libsForQt5.qt5.qtgraphicaleffects
-      eww waybar rofi qt5.qtgraphicaleffects
-      qt5.qtquickcontrols2
-      cava xwayland wl-clipboard dunst mpvpaper
-      htop cmatrix tty-clock catnip
+      kdePackages.dolphin # ✅ FIXED: Updated to Qt6 version
+      fuzzel              # App launcher
+      niri                # Scrollable Tiling Window Manager
+      obs-studio
+      vesktop             # Custom Discord client
     ];
-  in
-    # Combine all the lists into the final list
-    coreUtils ++ shellsAndTerminals ++ development ++ guiApps ++ customization;
 
+    # ─── Ricing & Customization ───────────────────────────────────
+    customization = with pkgs; [
+      # Theming
+      catnip              # System monitor
+      cava                # Audio visualizer
+      cmatrix             # Matrix rain
+      htop
+      pywal               # Generate color schemes from images
+      swww                # Wayland wallpaper daemon
+      tty-clock
+      wpgtk
+      
+      # Wayland Widgets & Utilities
+      dunst               # Notifications
+      eww                 # ElKowars wacky widgets
+      mpvpaper            # Video wallpapers
+      rofi                # App launcher / Menu
+      waybar              # Status bar
+      wl-clipboard
+      xwayland
+      
+      # Qt Theming (Cleaned up duplicates)
+      libsForQt5.qt5.qtgraphicaleffects
+      libsForQt5.qt5.qtquickcontrols2
+      sddm-chili-theme    # Note: Login themes usually go in system config
+    ];
+
+  in
+    # Combine all groups into the final list
+    coreUtils 
+    ++ shellsAndTerminals 
+    ++ development 
+    ++ guiApps 
+    ++ customization;
 }
