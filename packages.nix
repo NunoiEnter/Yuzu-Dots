@@ -24,6 +24,7 @@
       vim
       wget
       gh
+      firefox
     ];
 
     # ─── Shells, Terminals & CLI Tools ────────────────────────────
