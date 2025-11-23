@@ -1,9 +1,9 @@
-{ config, pkgs, lib, inputs, ... }:
+  { config, pkgs, lib, inputs, ... }:
 
 let
    # Copy your wallpaper into the Nix store
    # Ensure this file actually exists at this path!
-   myWallpaper = pkgs.copyPathToStore /home/monica/Pictures/wallpaper.jpg;
+   myWallpaper = pkgs.copyPathToStore ./assets/wallpaper.jpg;
    
    # SDDM Chili theme with custom background
    sddm-chili-fixed = pkgs.stdenv.mkDerivation {
@@ -34,9 +34,27 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = false;
+  
   boot.loader.efi.canTouchEfiVariables = true;
+  
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev"; # "nodev" is required for UEFI
+    efiSupport = true;
+    useOSProber = true; # Finds Windows if you have it
+    
+    # 3. YUZUSOFT THEMING
+    # This will set your background image
+    splashImage = ./assets/boot-background.jpg;
+    
+    # Optional: If you want a full pre-made theme (like Catppuccin)
+    # theme = pkgs.catzppuccin-grub; 
+  };
+
+
 
   # SHELL ZSH
   programs.zsh.enable = true;
@@ -77,17 +95,20 @@ in
   # GRAPHICAL ENVIRONMENT
   services.xserver.enable = true;
   
-  # SDDM configuration with Chili theme
-  services.displayManager.sddm = {
+services.displayManager.sddm = {
     enable = true;
     theme = "chili";
+    
+    # REMOVE the 'package = ...' line if it's still there.
+
     extraPackages = with pkgs; [
-      libsForQt5.qt5.qtgraphicaleffects
-      libsForQt5.qt5.qtquickcontrols2
+      qt6.qt5compat        # Provides the graphical effects for old themes
+      qt6.qtdeclarative    # Required for loading QML
+      qt6.qtsvg            # Required for SVG icons
     ];
   };
 
-  services.xserver.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
   
   # VIDEO DRIVERS
   services.xserver.videoDrivers = [ "amdgpu" ];
@@ -152,7 +173,6 @@ in
     lutris
     vulkan-tools
     glxinfo
-    
     # Add the fixed SDDM Chili theme
     sddm-chili-fixed
  ];
