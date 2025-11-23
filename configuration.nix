@@ -40,20 +40,15 @@ in
   
   boot.kernelPackages = pkgs.linuxPackages_latest;
   
-  boot.loader.grub = {
+boot.loader.grub = {
     enable = true;
-    device = "nodev"; # "nodev" is required for UEFI
+    device = "nodev";
     efiSupport = true;
-    useOSProber = true; # Finds Windows if you have it
+    useOSProber = true;
     
-    # 3. YUZUSOFT THEMING
-    # This will set your background image
-    splashImage = ./assets/boot-background.jpg;
-    
-    # Optional: If you want a full pre-made theme (like Catppuccin)
-    # theme = pkgs.catzppuccin-grub; 
+    # COMMENT THIS OUT with a hashtag
+    # theme = pkgs.catppuccin-grub + "/share/grub/themes/catppuccin-mocha-grub-theme"; 
   };
-
 
 
   # SHELL ZSH
@@ -97,14 +92,14 @@ in
   
 services.displayManager.sddm = {
     enable = true;
-    theme = "chili";
-    
-    # REMOVE the 'package = ...' line if it's still there.
-
+    package = pkgs.kdePackages.sddm;
+    theme = "sddm-astronaut-theme";    
     extraPackages = with pkgs; [
+      sddm-astronaut
       qt6.qt5compat        # Provides the graphical effects for old themes
       qt6.qtdeclarative    # Required for loading QML
       qt6.qtsvg            # Required for SVG icons
+      qt6.qtmultimedia
     ];
   };
 
@@ -175,6 +170,7 @@ services.displayManager.sddm = {
     glxinfo
     # Add the fixed SDDM Chili theme
     sddm-chili-fixed
+    sddm-astronaut
  ];
 
   services.openssh.enable = true;
