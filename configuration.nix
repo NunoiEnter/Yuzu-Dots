@@ -1,80 +1,60 @@
-  { config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
-   # Copy your wallpaper into the Nix store
-   # Ensure this file actually exists at this path!
-   myWallpaper = pkgs.copyPathToStore ./assets/wallpaper.jpg;
-   
-   # SDDM Chili theme with custom background
-   sddm-chili-fixed = pkgs.stdenv.mkDerivation {
-    name = "sddm-chili-theme-fixed";
-    src = pkgs.fetchFromGitHub {
-      owner = "MarianArlt";
-      repo = "sddm-chili";
-      rev = "6516d50176c3b34df29003726ef9708813d06271";
-      sha256 = "036fxsa7m8ymmp3p40z671z163y6fcsa9a641lrxdrw225ssq5f3";
+  # --- CUSTOM SDDM THEME ---
+  # We override the Astronaut theme to use your wallpaper
+  custom-sddm-astronaut = pkgs.sddm-astronaut.override {
+    themeConfig = {
+      # FIX 1: Use "${ ... }" to force it to be a string path in the Nix Store
+      Background = "${./assets/wallpaper.jpg}";
+      PartialBlur = "true"; 
+      FormPosition = "left";
     };
-    installPhase = ''
-      mkdir -p $out/share/sddm/themes/chili
-      cp -r * $out/share/sddm/themes/chili/
-      
-      # Replace the default background with your custom one
-      cp ${myWallpaper} $out/share/sddm/themes/chili/assets/background.jpg
-    '';
   };
+
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
       ./hardware-configuration.nix
       ./fonts.nix 
     ];
 
-  # FLAKES SETTINGS
+  # --- FLAKES & SYSTEM ---
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  system.stateVersion = "25.05";
 
-  # Bootloader.
+  # Garbage Collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+
+  # --- BOOTLOADER ---
   boot.loader.systemd-boot.enable = false;
-  
   boot.loader.efi.canTouchEfiVariables = true;
-  
   boot.kernelPackages = pkgs.linuxPackages_latest;
   
-boot.loader.grub = {
+  boot.loader.grub = {
     enable = true;
     device = "nodev";
     efiSupport = true;
     useOSProber = true;
-    
-    # COMMENT THIS OUT with a hashtag
-    # theme = pkgs.catppuccin-grub + "/share/grub/themes/catppuccin-mocha-grub-theme"; 
   };
 
-
-  # SHELL ZSH
-  programs.zsh.enable = true;
-  environment.shells = with pkgs; [ zsh ];
-  users.defaultUserShell = pkgs.zsh;
-  
-  # HOSTNAME
+  # --- NETWORKING & TIME ---
   networking.hostName = "nixchanclanker"; 
-
-  # Enable networking
   networking.networkmanager.enable = true;
-
-  # Set your time zone.
   time.timeZone = "Asia/Bangkok";
 
-  # INTERNATIONALISATION
+  # --- LOCALES ---
   i18n.defaultLocale = "en_US.UTF-8";
-  
-  # Define all locales to be built (en, ja, th)
   i18n.supportedLocales = [
     "en_US.UTF-8/UTF-8"
     "ja_JP.UTF-8/UTF-8"
     "th_TH.UTF-8/UTF-8"
   ];
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "th_TH.UTF-8";
     LC_IDENTIFICATION = "th_TH.UTF-8";
@@ -87,39 +67,46 @@ boot.loader.grub = {
     LC_TIME = "th_TH.UTF-8";
   };
 
-  # GRAPHICAL ENVIRONMENT
+  # --- GRAPHICAL ENVIRONMENT ---
   services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "amdgpu" ];
   
-services.displayManager.sddm = {
+  hardware.graphics = {
     enable = true;
+    enable32Bit = true;
+  };
+
+  # --- SDDM CONFIGURATION (FIXED) ---
+  services.displayManager.sddm = {
+    enable = true;
+    # FIX 2: Explicitly use Qt6 SDDM
     package = pkgs.kdePackages.sddm;
-    theme = "sddm-astronaut-theme";    
+    
+    # Use the official theme name (our override updates the config inside it)
+    theme = "sddm-astronaut-theme";
+    
+    # FIX 3: Add the missing dependencies! (This fixes the white screen)
     extraPackages = with pkgs; [
-      sddm-astronaut
-      qt6.qt5compat        # Provides the graphical effects for old themes
-      qt6.qtdeclarative    # Required for loading QML
-      qt6.qtsvg            # Required for SVG icons
-      qt6.qtmultimedia
+      custom-sddm-astronaut
+      qt6.qt5compat
+      qt6.qtdeclarative
+      qt6.qtsvg
+      qt6.qtmultimedia   # <--- The background renderer needs this!
+      qt6.qtvirtualkeyboard
     ];
   };
 
+  # --- DESKTOP & WINDOW MANAGER ---
   services.desktopManager.gnome.enable = true;
-  
-  # VIDEO DRIVERS
-  services.xserver.videoDrivers = [ "amdgpu" ];
-
-  # NIRI
   programs.niri.enable = true;
 
-  # KEYMAP
+  # --- INPUT ---
   services.xserver.xkb = {
     layout = "us,th";
     options = "grp:alt_shift_toggle";
   };
 
-  services.printing.enable = true;
-
-  # SOUND (Pipewire)
+  # --- SOUND ---
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -129,37 +116,22 @@ services.displayManager.sddm = {
     pulse.enable = true;
   };
 
-  # GRAPHICS DRIVERS
-  # "hardware.opengl" is deprecated in unstable, changed to "hardware.graphics"
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true; # Replaces driSupport32Bit
-  };
-
-  # USER ACCOUNT
+  # --- USER ---
   users.users.monica = {
     isNormalUser = true;
     description = "monica";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
-    packages = with pkgs; [ ];
-  };
-
-  # ENV VARIABLES
-  environment.sessionVariables = {
-    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-    NIXOS_OZONE_WL = "1";
+    packages = with pkgs; [];
   };
   
-  system.stateVersion = "25.05";
+  programs.zsh.enable = true;
+  environment.shells = with pkgs; [ zsh ];
+  users.defaultUserShell = pkgs.zsh;
 
-  # PERMITTED INSECURE PACKAGES
-  nixpkgs.config.permittedInsecurePackages = [
-    "mbedtls-2.28.10"
-  ];
+  # --- PACKAGES ---
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "mbedtls-2.28.10" ];
 
-  # SYSTEM PACKAGES
-  # (Note: Your detailed packages are inside ./packages.nix, these are extras)
   environment.systemPackages = with pkgs; [
     foot
     neovim
@@ -168,11 +140,16 @@ services.displayManager.sddm = {
     lutris
     vulkan-tools
     glxinfo
-    # Add the fixed SDDM Chili theme
-    sddm-chili-fixed
-    sddm-astronaut
- ];
+    # Add your custom theme here too just in case
+    custom-sddm-astronaut
+  ];
 
+  services.printing.enable = true;
   services.openssh.enable = true;
   services.flatpak.enable = true;
+  
+  environment.sessionVariables = {
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+    NIXOS_OZONE_WL = "1";
+  };
 }
