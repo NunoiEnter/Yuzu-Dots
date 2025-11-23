@@ -82,7 +82,7 @@
 
     # ─── GUI Applications ─────────────────────────────────────────
     guiApps = with pkgs; [
-      kdePackages.dolphin # ✅ FIXED: Updated to Qt6 version
+      kdePackages.dolphin # Updated to Qt6 version
       fuzzel              # App launcher
       niri                # Scrollable Tiling Window Manager
       obs-studio
@@ -100,7 +100,7 @@
       swww                # Wayland wallpaper daemon
       tty-clock
       wpgtk
-      
+      wbg 
       # Wayland Widgets & Utilities
       dunst               # Notifications
       eww                 # ElKowars wacky widgets
