@@ -55,7 +55,7 @@
       # Editors
       neovim
       vscode
-      
+      jdk
       # Languages & Runtimes
       bun
       gcc
