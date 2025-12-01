@@ -56,6 +56,7 @@
       neovim
       vscode
       jdk
+      code-cursor
       # Languages & Runtimes
       bun
       gcc
