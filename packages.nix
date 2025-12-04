@@ -25,6 +25,9 @@
       wget
       gh
       firefox
+      xwayland
+      xorg.xeyes  # for testing
+      xorg.xclock # for testing
     ];
 
     # ─── Shells, Terminals & CLI Tools ────────────────────────────
@@ -57,6 +60,7 @@
       vscode
       jdk
       code-cursor
+      netbeans
       # Languages & Runtimes
       bun
       gcc

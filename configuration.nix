@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{config, pkgs, lib, inputs, ... }:
 
 let
   # --- CUSTOM SDDM THEME ---
@@ -7,7 +7,7 @@ let
     themeConfig = {
       # FIX 1: Use "${ ... }" to force it to be a string path in the Nix Store
       Background = "${./assets/wallpaper.jpg}";
-      PartialBlur = "true"; 
+     PartialBlur = "true"; 
       FormPosition = "left";
     };
   };
@@ -70,7 +70,6 @@ in
   # --- GRAPHICAL ENVIRONMENT ---
   services.xserver.enable = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
-  
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -99,7 +98,21 @@ in
   # --- DESKTOP & WINDOW MANAGER ---
   services.desktopManager.gnome.enable = true;
   programs.niri.enable = true;
+  
 
+  environment.sessionVariables = {
+  _JAVA_AWT_WM_NONREPARENTING = "1";
+  AWT_TOOLKIT = "XToolkit";
+};
+
+  systemd.user.services.xwayland = {
+  description = "XWayland server";
+  wantedBy = [ "graphical-session.target" ];
+  serviceConfig = {
+    ExecStart = "${pkgs.xwayland}/bin/Xwayland :0";
+    Restart = "on-failure";
+  };
+};
   # --- INPUT ---
   services.xserver.xkb = {
     layout = "us,th";
